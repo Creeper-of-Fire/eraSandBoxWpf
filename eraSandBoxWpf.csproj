@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UseWPF>true</UseWPF>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AduSkin" Version="1.1.1.9" />
+      <PackageReference Include="HandyControls" Version="3.5.3" />
+      <PackageReference Include="HandyControls.Lang.zh-CN" Version="3.5.3" />
+      <PackageReference Include="MaterialDesignThemes" Version="5.1.1-ci697" />
+      <PackageReference Include="Panuon.WPF.UI" Version="1.2.2.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Page Update="Frame\MainPage\InGamePage.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
+      <Page Update="Frame\MainPage\MainMenuPage.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
+    </ItemGroup>
+
+</Project>
