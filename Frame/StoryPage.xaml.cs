@@ -37,6 +37,7 @@ public partial class StoryPage : Page
         StoryTeller.NewLine();
         StoryTeller.Text("test", isBold: true);
         StoryTeller.Text("test", isBold: true);
+        StoryTeller.ToNewSection();
         // 假设你已经有了一个 ScrollViewer 对象，名为 myScrollViewer
         
         // StoryTeller.ToNewSection();

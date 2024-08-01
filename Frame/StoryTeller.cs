@@ -13,7 +13,7 @@ namespace eraSandBoxWpf.Frame;
 
 public static class StoryTeller
 {
-    private static StackPanel StoryTextFlow => StoryPage.Instance.StoryTextFlow;
+    private static ItemsControl StoryTextFlow => StoryPage.Instance.StoryTextFlow;
 
     private static ScrollViewer StoryTextScroller => StoryPage.Instance.StoryTextScroller;
     //
@@ -90,16 +90,6 @@ public static class StoryTeller
         AddToParagraph(span);
         return new TextBuilder<Span>(span).InitForeground(foreground);
     }
-    //
-    // public static ControlBuilder<Divider> Divider()
-    // {
-    //     var divider = new Divider();
-    //     // divider.Foreground = Brushes.Black;
-    //     var stackPanel = new StackPanel();
-    //     stackPanel.Children.Add(divider);
-    //     LastParagraph.Inlines.Add(stackPanel);
-    //     return new ControlBuilder<Divider>(divider);
-    // }
 
     /// <summary>
     /// 换行
@@ -142,31 +132,82 @@ public static class StoryTeller
     //     return paragraph;
     // }
 
-    private const int FontSize = 20;
+    private const int FontSize = 18;
 
     /// <summary>
-    /// 创建一个新的大段落
+    /// 创建一个新的自然段
     /// </summary>
     /// <returns></returns>
-    public static TextBlock ToNewParagraph()
+    public static Paragraph ToNewParagraph()
     {
-        var section = new TextBlock();
-        section.FontSize = FontSize;
+        var section = new RichTextBox
+        {
+            FontSize = FontSize,
+            IsReadOnly = true,
+            IsReadOnlyCaretVisible = true,
+            BorderThickness = new Thickness(0, 0, 0, 0),
+            Margin = new Thickness(0, 0, 0, 0),
+            Padding = new Thickness(0, 0, 0, 0),
+            Document = new FlowDocument()
+        };
+        BorderElement.SetCircular(section, false);
+        BorderElement.SetCornerRadius(section, new CornerRadius(0));
+        LastSection.Items.Add(section);
+        var paragraph = new Paragraph();
+        section.Document.Blocks.Add(paragraph);
+        return paragraph;
+    }
+
+    /// <summary>
+    /// 创建一个新的大段落，会禁用之前大段落中所有的可交互控件
+    /// </summary>
+    /// <returns></returns>
+    public static ItemsControl ToNewSection()
+    {
+        foreach (object lastSectionItem in LastSection.Items)
+        {
+            switch (lastSectionItem)
+            {
+                case UIElement button:
+                    button.IsEnabled = false;
+                    break;
+                case ContentElement hyperlink:
+                    hyperlink.IsEnabled = false;
+                    break;
+            }
+        }
+
+        var section = new ItemsControl();
         section.Padding = new Thickness(0, 0, 0, 0);
-        section.TextAlignment = TextAlignment.Left;
-        StoryTextFlow.Children.Add(section);
+        StoryTextFlow.Items.Add(section);
         return section;
     }
 
-    private static TextBlock LastParagraph
+    private static Paragraph LastParagraph
     {
         get
         {
-            var lastBlock = StoryTextFlow.Children[^1];
-            if (lastBlock is TextBlock paragraph)
-                return paragraph;
+            object? lastBlock = StoryTextFlow.Items[^1];
+            if (lastBlock is RichTextBox richTextBox)
+            {
+                if (richTextBox.Document.Blocks.LastBlock is Paragraph paragraph)
+                    return paragraph;
+            }
+
             Console.Out.WriteLine("没有找到Paragraph，创建一个新的");
             return ToNewParagraph();
+        }
+    }
+
+    private static ItemsControl LastSection
+    {
+        get
+        {
+            var lastBlock = StoryTextFlow.Items[^1];
+            if (lastBlock is ItemsControl paragraph)
+                return paragraph;
+            Console.Out.WriteLine("没有找到Paragraph，创建一个新的");
+            return ToNewSection();
         }
     }
 

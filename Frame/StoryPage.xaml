@@ -10,42 +10,73 @@
     <ScrollViewer
         x:Name="StoryTextScroller"
         Padding="0"
-        Margin="5" BorderBrush="Black" BorderThickness="0,0,0,1">
-        <!-- <FlowDocumentScrollViewer.Style></FlowDocumentScrollViewer.Style> -->
-        <StackPanel x:Name="StoryTextFlow">
-            <hc:Divider></hc:Divider>
-            <TextBlock TextWrapping="Wrap"
-                       FontSize="20"
-                       Padding="0,10" TextAlignment="Left">
+        Margin=" 10,10,0,10" BorderBrush="Black" BorderThickness="0,0,0,1">
+        <Grid>
+            <!-- <Grid.ShowGridLines>True</Grid.ShowGridLines> -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="10" />
+            </Grid.ColumnDefinitions>
+            <ItemsControl Padding="0" x:Name="StoryTextFlow">
+                <!-- 这里被称之为section -->
+                <ItemsControl Padding="0">
+                    <!-- 这里的RichTextBox被称之为paragraph -->
+                    <hc:Divider></hc:Divider>
+                    <RichTextBox
+                        IsReadOnly="True"
+                        IsReadOnlyCaretVisible="True"
+                        IsDocumentEnabled="True"
+                        BorderThickness="0"
+                        hc:BorderElement.Circular="False"
+                        hc:BorderElement.CornerRadius="0"
+                        FontSize="16"
+                        Padding="0">
+                        <FlowDocument>
+                            <Paragraph>
+                                <Bold>Neptune</Bold> (planet), major planet in the solar system, eighth planet
+                                from the Sun and fourth largest in diameter.
+                                <Hyperlink Foreground="Coral" Click="Hyperlink_Click">Pluto (about 2,790 million mi)</Hyperlink>
+                                , from the Sun.  Neptune
+                                revolves outside the
+                                <InlineUIContainer BaselineAlignment="Center">
+                                    <Button FontSize="16" Click="Hyperlink_Click">orbit of Uranus and for most of</Button>
+                                </InlineUIContainer>
 
-                <Bold>Neptune</Bold> (planet), major planet in the solar system, eighth planet
-                from the Sun and fourth largest in diameter.
-                <Hyperlink Foreground="Coral" Click="Hyperlink_Click">Pluto (about 2,790 million mi)</Hyperlink> , from the Sun.  Neptune
-                revolves outside the orbit of Uranus and for most of its orbit moves inside the
-                elliptical path of the outermost planet Pluto (see Solar System). Every 248 years,
-                Pluto’s elliptical orbit brings the planet inside Neptune’s nearly circular orbit
-                for about 20 years, temporarily making Neptune the farthest planet from the Sun.
-                The last time
-                Pluto’s orbit brought it inside Neptune’s orbit was in 1979. In
-                1999 Pluto’s orbit carried it back outside Neptune’s orbit.
+                                <Bold>Neptune</Bold> (planet), major planet in the solar system, eighth planet
+                                from the Sun and fourth largest in diameter.
+                                <Hyperlink Foreground="Coral" Click="Hyperlink_Click">Pluto (about 2,790 million mi)</Hyperlink>
+                                , from the Sun.  Neptune
+                                revolves outside the orbit of Uranus and for most of its orbit moves inside the
+                                elliptical path of the outermost planet Pluto (see Solar System). Every 248 years,
+                                Pluto’s elliptical orbit brings the planet inside Neptune’s nearly circular orbit
+                                for about 20 years, temporarily making Neptune the farthest planet from the Sun.
+                                The last time
+                                Pluto’s orbit brought it inside Neptune’s orbit was in 1979. In
+                                1999 Pluto’s orbit carried it back outside Neptune’s orbit.
 
-                Astronomers believe Neptune has an inner rocky core that is surrounded by a vast
-                ocean of water mixed with rocky material. From the inner core, this ocean extends
-                upward until it meets a gaseous atmosphere of hydrogen, helium, and trace amounts
-                of methane. Neptune has four rings and 11 known moons. Even though Neptune's volume
-                is 72 times Earth’s volume, its mass is only 17.15 times Earth’s mass. Because of
-                its size, scientists classify Neptune—along with Jupiter, Saturn, and Uranus—as
-                one of the giant or Jovian planets (so-called because they resemble Jupiter).
+                                Astronomers believe Neptune has an inner rocky core that is surrounded by a vast
+                                ocean of water mixed with rocky material. From the inner core, this ocean extends
+                                upward until it meets a gaseous atmosphere of hydrogen, helium, and trace amounts
+                                of methane. Neptune has four rings and 11 known moons. Even though Neptune's volume
+                                is 72 times Earth’s volume, its mass is only 17.15 times Earth’s mass. Because of
+                                its size, scientists classify Neptune—along with Jupiter, Saturn, and Uranus—as
+                                one of the giant or Jovian planets (so-called because they resemble Jupiter).
 
-                Mathematical theories of astronomy led to the discovery of Neptune. To account for
-                wobbles in the orbit of the planet Uranus, British astronomer John Couch Adams and
-                French astronomer Urbain Jean Joseph Leverrier independently calculated the existence
-                and position of a new planet in 1845 and 1846, respectively. They theorized that the
-                gravitational attraction of this planet for Uranus was causing the wobbles in Uranus’s
-                orbit. Using information from Leverrier, German astronomer Johann Gottfried Galle first
-                observed the planet in 1846.
-
-            </TextBlock>
-        </StackPanel>
+                                Mathematical theories of astronomy led to the discovery of Neptune. To account for
+                                wobbles in the orbit of the planet Uranus, British astronomer John Couch Adams and
+                                French astronomer Urbain Jean Joseph Leverrier independently calculated the existence
+                                and position of a new planet in 1845 and 1846, respectively. They theorized that the
+                                gravitational attraction of this planet for Uranus was causing the wobbles in Uranus’s
+                                orbit. Using information from Leverrier, German astronomer Johann Gottfried Galle first
+                                observed the planet in 1846.
+                            </Paragraph>
+                        </FlowDocument>
+                    </RichTextBox>
+                    <hc:Divider></hc:Divider>
+                    <hc:Divider></hc:Divider>
+                    <hc:Divider></hc:Divider>
+                </ItemsControl>
+            </ItemsControl>
+        </Grid>
     </ScrollViewer>
 </Page>
