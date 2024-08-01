@@ -16,16 +16,17 @@ public partial class InGamePage : Page
         get => (bool)this.GetValue(IsTakingTurnProperty);
         set => this.SetValue(IsTakingTurnProperty, value);
     }
-    
-    // private System.Windows.Controls.Frame? MainPageOfGame => 
-    //     this.FindName("MainPageOfGame") as System.Windows.Controls.Frame;
-    private NavigationService MainPageNavigationService=>this.MainPageOfGame.NavigationService;
-    public InGamePage()
+
+    public NavigationService MainPageNavigationService => this.MainPageOfGame.NavigationService;
+   
+
+    private InGamePage()
     {
         this.InitializeComponent();
-
-        
+        this.MainPageNavigationService.Navigate(StoryPage.Instance);
     }
+
+    public static InGamePage Instance { get; } = new();
 
     private async void TakeTurn_Click(object sender, RoutedEventArgs e)
     {
@@ -47,5 +48,11 @@ public partial class InGamePage : Page
         }
     }
 
-    
+    private void TestSeeCharacterButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (Equals(this.MainPageNavigationService.Content, ShowPersonPage.Instance))
+            this.MainPageNavigationService.NavigateToHomePage(StoryPage.Instance);
+        else
+            this.MainPageNavigationService.Navigate(ShowPersonPage.Instance);
+    }
 }

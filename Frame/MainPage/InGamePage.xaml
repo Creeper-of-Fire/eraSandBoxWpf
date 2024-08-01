@@ -4,32 +4,62 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:hc="https://handyorg.github.io/handycontrol"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:control="clr-namespace:eraSandBoxWpf.Control"
+      xmlns:controls="clr-namespace:eraSandBoxWpf.Controls"
       mc:Ignorable="d"
       Title="InGameMainPage" d:DesignHeight="450" d:DesignWidth="800">
     <Grid ShowGridLines="True">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="23*" />
-            <RowDefinition Height="157*" />
-            <RowDefinition Height="45*" />
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="45*" />
             <ColumnDefinition Width="296*" />
             <ColumnDefinition Width="59*" />
         </Grid.ColumnDefinitions>
-        <Frame NavigationUIVisibility="Hidden" x:Name="MainPageOfGame" Grid.Column="1" Grid.Row="1" Source="StoryPage.xaml" />
-        <Button
+        <Grid ShowGridLines="True" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="23*" />
+                <RowDefinition Height="157*" />
+                <RowDefinition Height="45*" />
+            </Grid.RowDefinitions>
+        </Grid>
+        <Grid ShowGridLines="True" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10*" />
+                <RowDefinition Height="170*" />
+                <RowDefinition Height="45*" />
+            </Grid.RowDefinitions>
+            <Frame
+                x:Name="MainPageOfGame"
+                JournalOwnership="OwnsJournal"
+                NavigationUIVisibility="Hidden" Grid.Row="1" />
+            <Grid Grid.Row="2" Grid.Column="0">
+                <controls:MultiButton x:Name="InGameMultiButton">
+                </controls:MultiButton>
+            </Grid>
+        </Grid>
+        <Grid ShowGridLines="True" Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="23*" />
+                <RowDefinition Height="157*" />
+                <RowDefinition Height="45*" />
+            </Grid.RowDefinitions>
+            <Button
                 x:Name="TakeTurnButton"
+                Grid.Row="2"
                 IsEnabled="True"
                 Content="下一回合"
                 Click="TakeTurn_Click"
                 Width="98" Height="35"
-                HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="2" Margin="0,10,0,0" Grid.Row="2">
-        </Button>
-        <Grid Grid.Row="2" Grid.Column="1">
-            <control:MultiButton x:Name="MultiButton">
-            </control:MultiButton>
+                HorizontalAlignment="Center" VerticalAlignment="Top"
+                Margin="0,10,0,0">
+            </Button>
+            <Button
+                x:Name="TestSeeCharacterButton"
+                Grid.Row="1"
+                IsEnabled="True"
+                Content="查看测试角色"
+                Click="TestSeeCharacterButton_Click"
+                Width="98" Height="35" Margin="10"
+                HorizontalAlignment="Center" VerticalAlignment="Top">
+            </Button>
         </Grid>
     </Grid>
 </Page>

@@ -9,8 +9,10 @@
         Title="eraSandBox" Height="Auto" Width="Auto">
     <Grid ShowGridLines="True">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Frame NavigationUIVisibility="Hidden" x:Name="GamePage" Grid.Column="0" Grid.Row="0" Source="Frame/MainMenuPage.xaml" />
+        <Frame NavigationUIVisibility="Hidden"
+               JournalOwnership="OwnsJournal"
+               x:Name="GamePage" Grid.Column="0" Grid.Row="0" />
     </Grid>
 </Window>

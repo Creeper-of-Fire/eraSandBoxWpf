@@ -10,18 +10,10 @@ public partial class MainMenuPage : Page
         this.InitializeComponent();
     }
 
+    public static MainMenuPage Instance { get; } = new();
+
     private void StartGame_Click(object sender, RoutedEventArgs e)
     {
-        var inGameMainPage = new InGamePage();
-        // var parentWindow = Window.GetWindow(this);
-        // if (parentWindow is MainWindow mainWindow)
-        // {
-        //     mainWindow.MainPage.Navigate(uri);
-        // }
-        this.NavigationService?.Navigate(inGameMainPage);
-        // if (this.Frame != null && this.Frame.SourcePageType != typeof(InGameMainPage))
-        // {
-        //     this.Frame.Navigate(typeof(InGameMainPage));
-        // }
+        this.NavigationService?.NavigateToHomePage(InGamePage.Instance);
     }
 }
