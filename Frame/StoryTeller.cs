@@ -7,12 +7,15 @@ using HandyControl.Controls;
 using HandyControl.Tools.Extension;
 using Microsoft.Xaml.Behaviors.Core;
 using static eraSandBoxWpf.Frame.StoryTellerBuilder;
+using ScrollViewer = System.Windows.Controls.ScrollViewer;
 
 namespace eraSandBoxWpf.Frame;
 
 public static class StoryTeller
 {
-    private static FlowDocument StoryTextFlow => StoryPage.Instance.StoryTextFlow;
+    private static StackPanel StoryTextFlow => StoryPage.Instance.StoryTextFlow;
+
+    private static ScrollViewer StoryTextScroller => StoryPage.Instance.StoryTextScroller;
     //
     // public void UnAbleAle()
 
@@ -54,7 +57,7 @@ public static class StoryTeller
             hyperlink.Foreground = foreground;
         if (!toolTip.IsNullOrEmpty())
             hyperlink.ToolTip = toolTip;
-        LastParagraph.Inlines.Add(hyperlink);
+        AddToParagraph(hyperlink);
         return new TextBuilder<Hyperlink>(hyperlink).InitToolTip(toolTip).InitForeground(foreground);
     }
 
@@ -84,7 +87,7 @@ public static class StoryTeller
             span = new Underline(span);
         if (fontSize < 0)
             span.FontSize = LastParagraph.FontSize;
-        LastParagraph.Inlines.Add(span);
+        AddToParagraph(span);
         return new TextBuilder<Span>(span).InitForeground(foreground);
     }
     //
@@ -105,7 +108,7 @@ public static class StoryTeller
     public static ITextBuilder<LineBreak> NewLine()
     {
         var lineBreak = new LineBreak();
-        LastParagraph.Inlines.Add(lineBreak);
+        AddToParagraph(lineBreak);
         return new TextBuilder<LineBreak>(lineBreak);
     }
 
@@ -118,26 +121,26 @@ public static class StoryTeller
     )
     {
         ToNewParagraph();
-        ToNewParagraph(true);
+        ToNewParagraph();
         if (fontSize < 0)
             fontSize = LastParagraph.FontSize * 2;
         Text(text, isBold, isItalia, isUnderLine, foreground, fontSize);
         ToNewParagraph();
     }
 
-    /// <summary>
-    /// 创建一个新的自然段
-    /// </summary>
-    /// <returns></returns>
-    public static Paragraph ToNewParagraph(bool isDivide = false, double divideThick = 1)
-    {
-        var paragraph = new Paragraph();
-        paragraph.BorderBrush = LastSection.BorderBrush;
-        if (isDivide)
-            paragraph.BorderThickness = new Thickness(0, 0, 0, 1);
-        LastSection.Blocks.Add(paragraph);
-        return paragraph;
-    }
+    // /// <summary>
+    // /// 创建一个新的自然段
+    // /// </summary>
+    // /// <returns></returns>
+    // public static Paragraph ToNewParagraph(bool isDivide = false, double divideThick = 1)
+    // {
+    //     var paragraph = new Paragraph();
+    //     paragraph.BorderBrush = LastSection.BorderBrush;
+    //     if (isDivide)
+    //         paragraph.BorderThickness = new Thickness(0, 0, 0, 1);
+    //     LastSection.Blocks.Add(paragraph);
+    //     return paragraph;
+    // }
 
     private const int FontSize = 20;
 
@@ -145,42 +148,37 @@ public static class StoryTeller
     /// 创建一个新的大段落
     /// </summary>
     /// <returns></returns>
-    public static Section ToNewSection(bool isDivide = true, double divideThick = 2)
+    public static TextBlock ToNewParagraph()
     {
-        if (isDivide)
-            LastParagraph.BorderThickness = new Thickness(0, 0, 0, divideThick);
-        var section = new Section();
+        var section = new TextBlock();
         section.FontSize = FontSize;
         section.Padding = new Thickness(0, 0, 0, 0);
-        // section.BorderBrush = Brushes.Black;
-        // if (isDivide)
-        section.BorderThickness = new Thickness(0, 0, 0, 0);
         section.TextAlignment = TextAlignment.Left;
-        StoryTextFlow.Blocks.Add(section);
+        StoryTextFlow.Children.Add(section);
         return section;
     }
 
-    private static Paragraph LastParagraph
+    private static TextBlock LastParagraph
     {
         get
         {
-            var lastBlock = LastSection.Blocks.LastBlock;
-            if (lastBlock is Paragraph paragraph)
+            var lastBlock = StoryTextFlow.Children[^1];
+            if (lastBlock is TextBlock paragraph)
                 return paragraph;
             Console.Out.WriteLine("没有找到Paragraph，创建一个新的");
             return ToNewParagraph();
         }
     }
 
-    private static Section LastSection
+    private static void AddToParagraph(UIElement element)
     {
-        get
-        {
-            var lastBlock = StoryTextFlow.Blocks.LastBlock;
-            if (lastBlock is Section section)
-                return section;
-            Console.Out.WriteLine("没有找到Section，创建一个新的");
-            return ToNewSection();
-        }
+        LastParagraph.Inlines.Add(element);
+        StoryTextScroller.ScrollToBottom();
+    }
+
+    private static void AddToParagraph(Inline inline)
+    {
+        LastParagraph.Inlines.Add(inline);
+        StoryTextScroller.ScrollToBottom();
     }
 }
