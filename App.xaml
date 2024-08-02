@@ -5,7 +5,10 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:pu="https://opensource.panuon.com/wpf-ui"
              xmlns:local="clr-namespace:eraSandBoxWpf"
-            StartupUri="MainWindow.xaml">
+             xmlns:command="http://www.galasoft.ch/mvvmlight"
+             xmlns:controls="clr-namespace:eraSandBoxWpf.Controls"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

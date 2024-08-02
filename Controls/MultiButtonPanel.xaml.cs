@@ -6,6 +6,6 @@ public partial class MultiButtonPanel : UserControl
 {
     public MultiButtonPanel()
     {
-        InitializeComponent();
+        this.InitializeComponent();
     }
 }

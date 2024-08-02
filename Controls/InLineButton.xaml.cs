@@ -7,7 +7,7 @@ public partial class InLineButton : UserControl
 {
     public InLineButton()
     {
-        InitializeComponent();
+        this.InitializeComponent();
     }
     
     public ICommand Command { get; set; }

@@ -34,9 +34,9 @@ public class DataViewModel : DemoViewModelBase<DemoDataModel>
     public static List<DemoDataModel> GetDemoDataList(int count)
     {
         var list = new List<DemoDataModel>();
-        for (var i = 1; i <= count; i++)
+        for (int i = 1; i <= count; i++)
         {
-            var index = i % 6 + 1;
+            int index = i % 6 + 1;
             var model = new DemoDataModel
             {
                 Index = i,

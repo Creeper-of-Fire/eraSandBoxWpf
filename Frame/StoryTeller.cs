@@ -304,7 +304,7 @@ public static class StoryTeller
     {
         get
         {
-            var lastBlock = StoryTextFlow.Items[^1];
+            object? lastBlock = StoryTextFlow.Items[^1];
             if (lastBlock is ItemsControl paragraph)
                 return paragraph;
             Console.Out.WriteLine("没有找到Paragraph，创建一个新的");
