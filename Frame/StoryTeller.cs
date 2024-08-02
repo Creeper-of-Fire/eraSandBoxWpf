@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -25,7 +26,12 @@ public static class StoryTeller
     /// <param name="text"></param>
     /// <param name="toolTip"></param>
     /// <param name="foreground"></param>
-    public static IControlBuilder<Button> Button(string text, string toolTip = "", Brush? foreground = null)
+    /// <param name="AddTo"></param>
+    public static IControlBuilder<Button> Button(
+        string text,
+        string toolTip = "",
+        Brush? foreground = null,
+        bool AddTo = true)
     {
         var button = new Button
         {
@@ -39,7 +45,8 @@ public static class StoryTeller
             BaselineAlignment = BaselineAlignment.Center,
             Child = button
         };
-        LastParagraph.Inlines.Add(inlineUiContainer);
+        if (AddTo)
+            AddToParagraph(inlineUiContainer);
         return new ControlBuilder<Button>(button).InitToolTip(toolTip).InitForeground(foreground);
     }
 
@@ -49,15 +56,21 @@ public static class StoryTeller
     /// <param name="text"></param>
     /// <param name="toolTip"></param>
     /// <param name="foreground"></param>
+    /// <param name="AddTo"></param>
     /// <returns></returns>
-    private static ITextBuilder<Hyperlink> HyperLink(string text, string toolTip = "", Brush? foreground = null)
+    private static ITextBuilder<Hyperlink> HyperLink(
+        string text,
+        string toolTip = "",
+        Brush? foreground = null,
+        bool AddTo = true)
     {
         var hyperlink = new Hyperlink(new Run(text));
         if (foreground != null)
             hyperlink.Foreground = foreground;
         if (!toolTip.IsNullOrEmpty())
             hyperlink.ToolTip = toolTip;
-        AddToParagraph(hyperlink);
+        if (AddTo)
+            AddToParagraph(hyperlink);
         return new TextBuilder<Hyperlink>(hyperlink).InitToolTip(toolTip).InitForeground(foreground);
     }
 
@@ -70,24 +83,29 @@ public static class StoryTeller
     /// <param name="isUnderLine"></param>
     /// <param name="foreground"></param>
     /// <param name="fontSize"></param>
+    /// <param name="AddTo"></param>
     /// <returns></returns>
     public static ITextBuilder<Span> Text(string text,
         bool isBold = false,
         bool isItalia = false,
         bool isUnderLine = false,
         Brush? foreground = null,
-        double fontSize = -1)
+        double fontSize = -1,
+        bool AddTo = true)
     {
-        var span = new Span(new Run(text));
+        var run = new Run(text);
+        run.FontSize = fontSize < 0 ? LastParagraph.FontSize : fontSize;
+        var span = new Span(run);
         if (isBold)
             span = new Bold(span);
         if (isItalia)
             span = new Italic(span);
         if (isUnderLine)
             span = new Underline(span);
-        if (fontSize < 0)
-            span.FontSize = LastParagraph.FontSize;
-        AddToParagraph(span);
+        span.FontSize = fontSize < 0 ? LastParagraph.FontSize : fontSize;
+
+        if (AddTo)
+            AddToParagraph(span);
         return new TextBuilder<Span>(span).InitForeground(foreground);
     }
 
@@ -102,35 +120,118 @@ public static class StoryTeller
         return new TextBuilder<LineBreak>(lineBreak);
     }
 
-    public static void Title(string text,
+    public static ITextBuilder<Span> Title(
+        string text,
         bool isBold = false,
         bool isItalia = false,
         bool isUnderLine = false,
         Brush? foreground = null,
-        double fontSize = -1
+        double fontSize = -1,
+        bool AddTo = true
     )
     {
-        ToNewParagraph();
-        ToNewParagraph();
-        if (fontSize < 0)
-            fontSize = LastParagraph.FontSize * 2;
-        Text(text, isBold, isItalia, isUnderLine, foreground, fontSize);
-        ToNewParagraph();
+        if (AddTo)
+            ToNewParagraph();
+        var span = Text(text: text, isBold: isBold, isItalia: isItalia, isUnderLine: isUnderLine,
+            foreground: foreground, fontSize: fontSize < 0 ? LastParagraph.FontSize * 2 : fontSize, AddTo: AddTo);
+        if (AddTo)
+            ToNewParagraph();
+        return span;
     }
 
-    // /// <summary>
-    // /// 创建一个新的自然段
-    // /// </summary>
-    // /// <returns></returns>
-    // public static Paragraph ToNewParagraph(bool isDivide = false, double divideThick = 1)
-    // {
-    //     var paragraph = new Paragraph();
-    //     paragraph.BorderBrush = LastSection.BorderBrush;
-    //     if (isDivide)
-    //         paragraph.BorderThickness = new Thickness(0, 0, 0, 1);
-    //     LastSection.Blocks.Add(paragraph);
-    //     return paragraph;
-    // }
+    public static IControlBuilder<Divider> ToDivideMode(this ITextBuilder<Span> span, IControlBuilder<Divider> divider)
+    {
+        AddToSection(divider.SetContent(span).Contain);
+        return divider;
+    }
+
+
+    public static IControlBuilder<Divider> DivideTitle(
+        string text,
+        bool isBold = false,
+        bool isItalia = false,
+        bool isUnderLine = false,
+        Brush? foreground = null,
+        double fontSize = -1,
+        double LR_padding = -1,
+        HorizontalAlignment HorizontalContentAlignment = HorizontalAlignment.Left,
+        SolidColorBrush? lineStroke = null,
+        double lineStrokeThickness = 2,
+        DoubleCollection? lineStrokeDashArray = null
+    )
+    {
+        var span = Title(text: text, isBold: isBold, isItalia: isItalia, isUnderLine: isUnderLine,
+            foreground: foreground, fontSize: fontSize, AddTo: false);
+        return Divide(dividerContent: span, LR_padding: LR_padding,
+            HorizontalContentAlignment: HorizontalContentAlignment,
+            lineStroke: lineStroke, lineStrokeThickness: lineStrokeThickness,
+            lineStrokeDashArray: lineStrokeDashArray);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dividerContent">内容</param>
+    /// <param name="LR_padding">左右的间距</param>
+    /// <param name="margin"></param>
+    /// <param name="HorizontalContentAlignment">内容所在的位置，默认靠左</param>
+    /// <param name="lineStroke">颜色</param>
+    /// <param name="lineStrokeThickness">厚度，默认为2</param>
+    /// <param name="lineStrokeDashArray">用来生成虚线</param>
+    /// <param name="AddTo"></param>
+    public static IControlBuilder<Divider> Divide(
+        object? dividerContent = null,
+        double LR_padding = -1,
+        Thickness? margin = null,
+        HorizontalAlignment HorizontalContentAlignment = HorizontalAlignment.Left,
+        SolidColorBrush? lineStroke = null,
+        double lineStrokeThickness = 2,
+        DoubleCollection? lineStrokeDashArray = null,
+        bool AddTo = true
+    )
+    {
+        var divider = new Divider();
+        switch (dividerContent)
+        {
+            case null:
+                break;
+            case string s:
+                divider.Content = Text(s, AddTo: false).Contain;
+                break;
+            case IElementBuilder<object> builder:
+                divider.Content = builder.RawContain;
+                break;
+            default:
+                divider.Content = dividerContent;
+                break;
+        }
+
+
+        if (LR_padding > 0)
+            divider.Padding = new Thickness(LR_padding, 0, LR_padding, 0);
+        if (margin is not null)
+            divider.Margin = (Thickness)margin;
+        divider.Orientation = Orientation.Horizontal;
+        divider.UseLayoutRounding = true;
+        divider.HorizontalContentAlignment = HorizontalContentAlignment;
+        if (lineStroke != null)
+            divider.LineStroke = lineStroke;
+        else
+        {
+            // var binding = new Binding();
+            // binding.Source = "{DynamicResource PrimaryTextBrush}";
+            // binding.Path = new PropertyPath("LineStroke");
+            divider.SetResourceReference(Divider.LineStrokeProperty, "PrimaryTextBrush");
+        }
+
+        if (lineStrokeThickness > 0)
+            divider.LineStrokeThickness = lineStrokeThickness;
+        if (lineStrokeDashArray != null)
+            divider.LineStrokeDashArray = lineStrokeDashArray;
+        if (AddTo)
+            AddToSection(divider);
+        return new ControlBuilder<Divider>(new Divider());
+    }
 
     private const int FontSize = 18;
 
@@ -152,9 +253,9 @@ public static class StoryTeller
         };
         BorderElement.SetCircular(section, false);
         BorderElement.SetCornerRadius(section, new CornerRadius(0));
-        LastSection.Items.Add(section);
         var paragraph = new Paragraph();
         section.Document.Blocks.Add(paragraph);
+        AddToSection(section);
         return paragraph;
     }
 
@@ -179,7 +280,7 @@ public static class StoryTeller
 
         var section = new ItemsControl();
         section.Padding = new Thickness(0, 0, 0, 0);
-        StoryTextFlow.Items.Add(section);
+        AddAsSection(section);
         return section;
     }
 
@@ -214,6 +315,18 @@ public static class StoryTeller
     private static void AddToParagraph(UIElement element)
     {
         LastParagraph.Inlines.Add(element);
+        StoryTextScroller.ScrollToBottom();
+    }
+
+    private static void AddToSection(object item)
+    {
+        LastSection.Items.Add(item);
+        StoryTextScroller.ScrollToBottom();
+    }
+
+    private static void AddAsSection(object item)
+    {
+        StoryTextFlow.Items.Add(item);
         StoryTextScroller.ScrollToBottom();
     }
 

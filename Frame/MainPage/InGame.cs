@@ -9,7 +9,7 @@ public class InGame
 {
     private static TotalWorld TotalWorld => TotalWorld.Instance;
     private static NavigationService MainPageNavigationService => InGamePage.Instance.MainPageNavigationService;
-    private static MultiButton MainButtons => InGamePage.Instance.InGameMultiButton;
+    private static MultiButton MainButtons => InGamePage.Instance.InGameMultiButtonPanel.MultiButtonInSide;
 }
 
 public static class InGameUtility

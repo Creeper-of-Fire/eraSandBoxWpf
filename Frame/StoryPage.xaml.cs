@@ -1,7 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
 using HandyControl.Data;
+using static eraSandBoxWpf.Frame.StoryTeller;
 using MessageBox = System.Windows.MessageBox;
 
 namespace eraSandBoxWpf.Frame;
@@ -31,15 +33,19 @@ public partial class StoryPage : Page
     private void Hyperlink_Click(object sender, RoutedEventArgs e)
     {
         // 在这里添加你的事件处理代码
-        StoryTeller.Button("test").InitToolTip("test");
-        StoryTeller.Text("test", isBold: true);
-        StoryTeller.Title("test");
-        StoryTeller.NewLine();
-        StoryTeller.Text("test", isBold: true);
-        StoryTeller.Text("test", isBold: true);
-        StoryTeller.ToNewSection();
+        Button("test").InitToolTip("test");
+        Text("test", isBold: true);
+        Title("test");
+        NewLine();
+        Text("test", isBold: true);
+        Text("test", isBold: true);
+        Divide(lineStrokeDashArray: new DoubleCollection { 2, 2 });
+        Divide(Text("test", AddTo: false));
+        DivideTitle("TestTitle");
+        Divide(margin: new Thickness(0, 0, 400, 0));
+        // StoryTeller.ToNewSection();
         // 假设你已经有了一个 ScrollViewer 对象，名为 myScrollViewer
-        
+
         // StoryTeller.ToNewSection();
         // StoryTeller.Paragraph();
         // this.UpdateLayout();

@@ -32,8 +32,7 @@
                 JournalOwnership="OwnsJournal"
                 NavigationUIVisibility="Hidden" Grid.Row="1" />
             <Grid Grid.Row="2" Grid.Column="0">
-                <controls:MultiButton x:Name="InGameMultiButton">
-                </controls:MultiButton>
+                <controls:MultiButtonPanel x:Name="InGameMultiButtonPanel" />
             </Grid>
         </Grid>
         <Grid ShowGridLines="True" Grid.Column="2">

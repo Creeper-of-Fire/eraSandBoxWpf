@@ -4,6 +4,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using HandyControl.Controls;
 using HandyControl.Tools.Extension;
 using Microsoft.Xaml.Behaviors.Core;
 
@@ -14,25 +15,30 @@ public static class StoryTellerBuilder
     public class TextBuilder<T>(T contain) : ITextBuilder<T>
         where T : FrameworkContentElement
     {
-        public T Contain { get; set; } = contain;
+        public object RawContain { get; init; } = contain;
     }
 
     public class ControlBuilder<T>(T contain) : IControlBuilder<T>
         where T : FrameworkElement
     {
-        public T Contain { get; set; } = contain;
+        public object RawContain { get; init; } = contain;
     }
 
-    public interface IControlBuilder<T>
+    public interface IElementBuilder<out T>
+    {
+        public object RawContain { get; }
+    }
+
+    public interface IControlBuilder<out T> : IElementBuilder<T>
         where T : FrameworkElement
     {
-        public T Contain { get; set; }
+        public T Contain => (T)this.RawContain;
     }
 
-    public interface ITextBuilder<T>
+    public interface ITextBuilder<out T> : IElementBuilder<T>
         where T : FrameworkContentElement
     {
-        public T Contain { get; set; }
+        public T Contain => (T)this.RawContain;
     }
 
     public static IControlBuilder<T> InitToolTip<T>(
@@ -69,6 +75,12 @@ public static class StoryTellerBuilder
         if (foreground != null)
             builder.Contain.Foreground = foreground;
         return builder;
+    }
+
+    public static IControlBuilder<Divider> SetContent(this IControlBuilder<Divider> divider, object content)
+    {
+        divider.Contain.Content = content;
+        return divider;
     }
 
     public static ITextBuilder<T> InitFrontSize<T>(

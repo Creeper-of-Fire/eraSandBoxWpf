@@ -21,7 +21,7 @@
                 <!-- 这里被称之为section -->
                 <ItemsControl Padding="0">
                     <!-- 这里的RichTextBox被称之为paragraph -->
-                    <hc:Divider></hc:Divider>
+                    <hc:Divider LineStroke="{DynamicResource PrimaryTextBrush}"></hc:Divider>
                     <RichTextBox
                         IsReadOnly="True"
                         IsReadOnlyCaretVisible="True"
@@ -72,9 +72,12 @@
                             </Paragraph>
                         </FlowDocument>
                     </RichTextBox>
-                    <hc:Divider></hc:Divider>
-                    <hc:Divider></hc:Divider>
-                    <hc:Divider></hc:Divider>
+                    <hc:Divider UseLayoutRounding="True"></hc:Divider>
+                    <hc:Divider UseLayoutRounding="True"></hc:Divider>
+                    <hc:Divider UseLayoutRounding="True"></hc:Divider>
+                    <hc:Divider UseLayoutRounding="True"></hc:Divider>
+                    <hc:Divider UseLayoutRounding="True"></hc:Divider>
+                    
                 </ItemsControl>
             </ItemsControl>
         </Grid>

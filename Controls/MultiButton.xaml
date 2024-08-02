@@ -4,45 +4,31 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:hc="https://handyorg.github.io/handycontrol"
-            xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:pu="https://opensource.panuon.com/wpf-ui"
              xmlns:objectModel="clr-namespace:System.Collections.ObjectModel;assembly=System.ObjectModel"
              xmlns:controls="clr-namespace:eraSandBoxWpf.Controls"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <Border BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}">
-            <hc:ScrollViewer
-                x:Name="MultiButtonScrollViewer"
-                hc:ScrollViewerAttach.IsDisabled="False" hc:ScrollViewerAttach.AutoHide="True"
-                IsInertiaEnabled="True"
-                HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
-                d:DesignHeight="300" d:DesignWidth="300">
-                <ItemsControl ItemsSource="{Binding ButtonModels}" d:DesignHeight="300" d:DesignWidth="300"
-                              d:ItemsSource="{d:SampleData ItemCount=99}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <hc:UniformSpacingPanel ChildWrapping="Wrap" Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
+    <hc:SimplePanel>
+        <ItemsControl ItemsSource="{Binding ButtonModels}" d:DesignHeight="300" d:DesignWidth="300"
+                      d:ItemsSource="{d:SampleData ItemCount=99}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <hc:UniformSpacingPanel ChildWrapping="Wrap" Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
 
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type controls:ButtonModel}">
-                            <Button Content="{Binding Text}"
-                                    Command="{Binding Command}"
-                                    ToolTip="{Binding Tooltip}"
-                                    Click="Button_Click"
-                                    CommandParameter="{Binding}"
-                                    Margin="4" ClipToBounds="False" Width="80" MinHeight="40" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </hc:ScrollViewer>
-            <!-- <hc:GotoTop Animated="True" AutoHiding="True" AnimationTime="500"  -->
-            <!--             HidingHeight = "50" -->
-            <!--             Target="{Binding ElementName=MultiButtonScrollViewer}"  -->
-            <!--             Width="50" Height="50" -->
-            <!--             HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10"/> -->
-        </Border>
-    </Grid>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type controls:ButtonModel}">
+                    <Button Content="{Binding Text}"
+                            Command="{Binding Command}"
+                            ToolTip="{Binding Tooltip}"
+                            Click="Button_Click"
+                            CommandParameter="{Binding}"
+                            Margin="4" ClipToBounds="False" Width="80" MinHeight="40" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </hc:SimplePanel>
 </UserControl>
